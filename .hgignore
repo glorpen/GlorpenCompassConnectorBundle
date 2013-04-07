@@ -1,0 +1,4 @@
+syntax: regexp
+^\.settings$
+^\.project$
+^\.buildpath$

@@ -1,0 +1,21 @@
+{
+    "name": "glorpen/compass-connector-bundle",
+    "type": "symfony-bundle",
+    "description": "Glorpen CompassConnectorBundle",
+    "keywords": ["Adapter for compass-conector compass extension"],
+    "authors": [
+        {
+            "name": "Arkadiusz Dzięgiel",
+            "email": "admin@glorpen.pl",
+            "homepage": "https://glorpen.pl"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1,<2.3-dev",
+    },
+    "autoload": {
+        "psr-0": { "Glorpen\\CompassConnectorBundle": "" }
+    },
+    "target-dir": "Glorpen/CompassConnectorBundle"
+}

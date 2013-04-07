@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="assetic.filter.compass_connector.class">Glorpen\CompassConnectorBundle\Filter\CompassConnectorFilter</parameter>
+        <parameter key="assetic.filter.compass_connector.plugins" type="collection" />
+        <parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>
+        <parameter key="assetic.filter.compass_connector.compass_bin">/home/arkus/.gem/ruby/1.9.1/bin/compass</parameter>
+        <parameter key="assetic.filter.compass_connector.console">%kernel.root_dir%/console</parameter>
+    </parameters>
+
+    <services>
+        <service id="assetic.filter.compass_connector" class="%assetic.filter.compass_connector.class%">
+            <tag name="assetic.filter" alias="compass_connector" />
+            <argument>%assetic.filter.compass_connector.cache_path%</argument>
+            <argument>%assetic.filter.compass_connector.compass_bin%</argument>
+            <argument>%assetic.filter.compass_connector.console%</argument>
+            <call method="setPlugins"><argument>%assetic.filter.compass_connector.plugins%</argument></call>
+        </service>
+    </services>
+</container>
