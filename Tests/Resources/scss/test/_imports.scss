@@ -1,0 +1,10 @@
+@import "style.css";
+@import "/style.css";
+
+styles {
+	url-vendor1: stylesheet-url("style.css");
+	url-vendor2: stylesheet-url("style.css", true);
+	
+	url-app1: stylesheet-url("/bundles/some/style.css");
+	url-app2: stylesheet-url("/bundles/some/style.css", true);
+}

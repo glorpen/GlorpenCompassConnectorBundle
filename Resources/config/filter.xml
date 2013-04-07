@@ -10,6 +10,11 @@
         <parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>
         <parameter key="assetic.filter.compass_connector.compass_bin">/home/arkus/.gem/ruby/1.9.1/bin/compass</parameter>
         <parameter key="assetic.filter.compass_connector.console">%kernel.root_dir%/console</parameter>
+        
+        <parameter key="assetic.filter.compass_connector.vendors.path">%kernel.root_dir%/../web/vendors</parameter>
+        <parameter key="assetic.filter.compass_connector.vendors.web">/vendors</parameter>
+        <parameter key="assetic.filter.compass_connector.generated_images.path">/vendors</parameter>
+        <parameter key="assetic.filter.compass_connector.generated_images.web">/vendors</parameter>
     </parameters>
 
     <services>

@@ -1,0 +1,8 @@
+test {
+    color: red;
+}
+
+@import "SomeBundle:test/imports";
+@import "SomeBundle:test/images";
+@import "SomeBundle:test/sprites";
+@import "SomeBundle:test/fonts";

@@ -2,3 +2,7 @@ syntax: regexp
 ^\.settings$
 ^\.project$
 ^\.buildpath$
+^vendor$
+^Tests/cache/.sass-cache$
+^Tests/cache/css$
+^Tests/cache/generated_images/bundles$
