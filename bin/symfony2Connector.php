@@ -1,48 +1,50 @@
 <?php
-namespace Glorpen\CompassConnectorBundle\Command;
-use Symfony\Component\Config\FileLocator;
 
-use Symfony\Component\Filesystem\Filesystem;
+require_once dirname(dirname(__DIR__)).'/bootstrap.php.cache';
+require_once dirname(dirname(__DIR__)).'/AppKernel.php';
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
 
-use Symfony\Component\DependencyInjection\Container;
-
-use Symfony\Component\Console\Input\InputInterface;
-
-use Symfony\Component\Console\Output\OutputInterface;
-
-use Symfony\Component\Console\Command\Command;
-
-class CompileCommand extends ContainerAwareCommand {
+class Connector {
 	
-	protected function configure(){
-		$this
-		->setName('compass-connector:compiler')
-		->setDescription('CompassConnector compiler bin')
-		;
+	protected $config, $kernel;
+	
+	public function __construct(array $config){
+		$this->config = $config;
 	}
 	
-	/**
-	 * @param InputInterface $input
-	 * @param OutputInterface $output
-	 * @throws \LogicException
-	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
-		$dialog = $this->getHelperSet()->get('dialog');
+	public function getKernel(){
+		if($this->kernel === null){
+			$this->kernel = new AppKernel('dev', false);
+			$this->kernel->init();
+			$this->kernel->boot();
+		}
 		
+		return $this->kernel;
+	}
+	
+	public function writeln($msg){
+		echo $msg."\n";
+	}
+	
+	public static function camelize($id){
+		return preg_replace_callback('/(^|_|\.)+(.)/', function ($match) { return ('.' === $match[1] ? '_' : '').strtoupper($match[2]); }, $id);
+	}
+	
+	public function execute() {
 		while(True){
-			try {
-				$line = $dialog->ask($output, "");
-			} catch(\RuntimeException $e){
+			$ret = fgets(STDIN, 4096);
+			if (false === $ret) { //connector was disconnected
 				exit(0);
 			}
+			$line = trim($ret);
 			$d = json_decode($line, true);
 			
 			try {
-				$output->writeln(json_encode(call_user_func_array(array($this, lcfirst(Container::camelize($d['method']))), $d['args'])));
+				$this->writeln(json_encode(call_user_func_array(array($this, lcfirst(self::camelize($d['method']))), $d['args'])));
 			} catch(\Exception $e){
-				$output->writeln(json_encode(array(
+				$this->writeln(json_encode(array(
 					'error'=> $e->getMessage()."\n".$e->getTraceAsString()
 				)));
 			}
@@ -60,18 +62,18 @@ class CompileCommand extends ContainerAwareCommand {
 	}
 	
 	protected function getVendorsPath(){
-		$dir = $this->getContainer()->getParameter('assetic.filter.compass_connector.vendors.path');
+		$dir = $this->config['vendors.path'];
 		return implode(DIRECTORY_SEPARATOR, array_merge(array($dir), func_get_args()));
 	}
 	
 	protected function getVendorsWeb(){
-		$dir = $this->getContainer()->getParameter('assetic.filter.compass_connector.vendors.web');
+		$dir = $this->config['vendors.web'];
 		return implode('/', array_merge(array($dir), func_get_args()));
 	}
 	
 	protected function getBundlePath($path){
 		preg_match('#^/bundles/([a-z0-9]+)/(.*)$#', $path, $matches);
-		foreach($this->getContainer()->get("kernel")->getBundles() as $b){
+		foreach($this->getKernel()->getBundles() as $b){
 			if($matches[1] === strtolower(substr($b->getName(),0,-6))){
 				return implode(DIRECTORY_SEPARATOR, array($b->getPath(), 'Resources','public',$matches[2]));
 			}
@@ -110,7 +112,7 @@ class CompileCommand extends ContainerAwareCommand {
 	public function findScss($path){
 		if(strpos($path, ':')!==false){
 			list($bundleName, $scssPath) = explode(':', $path);
-			$bundle = $this->getContainer()->get("kernel")->getBundle($bundleName);
+			$bundle = $this->getKernel()->getBundle($bundleName);
 			$path = implode(DIRECTORY_SEPARATOR, array($bundle->getPath(), 'Resources','scss', $scssPath));
 			$info = pathinfo($path);
 			
@@ -129,15 +131,15 @@ class CompileCommand extends ContainerAwareCommand {
 	}
 	
 	public function findGeneratedImage($uri){
-		$dir = $this->getContainer()->getParameter('assetic.filter.compass_connector.generated_images.path');
+		$dir = $this->config['generated_images.path'];
 		return $dir.DIRECTORY_SEPARATOR.$uri;
 	}
 	
 	public function getGeneratedImageUrl($uri){
 		if($this->checkAbsoluteUrl($uri)) return $uri;
 		
-		$dir = $this->getContainer()->getParameter('assetic.filter.compass_connector.generated_images.web');
-		return $dir.'/'.$uri;
+		$dir = $this->config['generated_images.web'];
+		return $dir.$uri;
 	}
 	
 	public function findSpritesMatching($path){
@@ -167,10 +169,14 @@ class CompileCommand extends ContainerAwareCommand {
 	
 	public function getConfiguration(){
 		return array(
-			'project_path' => $this->getContainer()->getParameter('assetic.filter.compass_connector.cache_path'),
-			'sass_path' => dirname($this->getContainer()->getParameter('kernel.root_dir')),
-			'css_path' => $this->getContainer()->getParameter('assetic.filter.compass_connector.cache_path').'/css',
-			'generated_images_path' => $this->getContainer()->getParameter('assetic.filter.compass_connector.generated_images.path')
+			'project_path' => $this->config['cache_path'],
+			'sass_path' => dirname($this->getKernel()->getRootDir()),
+			'css_path' => $this->config['cache_path'].'/css',
+			'generated_images_path' => $this->config['generated_images.path'],
+			'environment' => ':'.$this->config['env']
 		);
 	}
 }
+
+$c = new Connector(CONNECTOR_CONFIG);
+$c->execute();

@@ -9,12 +9,16 @@
         <parameter key="assetic.filter.compass_connector.plugins" type="collection" />
         <parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>
         <parameter key="assetic.filter.compass_connector.compass_bin">/home/arkus/.gem/ruby/1.9.1/bin/compass</parameter>
-        <parameter key="assetic.filter.compass_connector.console">%kernel.root_dir%/console</parameter>
+        <parameter key="assetic.filter.compass_connector.connector">%kernel.root_dir%/../src/Glorpen/CompassConnectorBundle/bin/symfony2Connector.php</parameter>
+        <parameter key="assetic.filter.compass_connector.ruby.home">/home/arkus</parameter>
         
         <parameter key="assetic.filter.compass_connector.vendors.path">%kernel.root_dir%/../web/vendors</parameter>
         <parameter key="assetic.filter.compass_connector.vendors.web">/vendors</parameter>
-        <parameter key="assetic.filter.compass_connector.generated_images.path">/vendors</parameter>
-        <parameter key="assetic.filter.compass_connector.generated_images.web">/vendors</parameter>
+        <parameter key="assetic.filter.compass_connector.generated_images.path">%kernel.root_dir%/../web/assetic/generated-images</parameter>
+        <parameter key="assetic.filter.compass_connector.generated_images.web">/assetic/generated-images</parameter>
+        
+        <parameter key="assetic.filter.compass_connector.environment">development</parameter>
+        <parameter key="assetic.filter.compass_connector.sass_root">%kernel.root_dir%/../</parameter>
     </parameters>
 
     <services>
@@ -22,8 +26,15 @@
             <tag name="assetic.filter" alias="compass_connector" />
             <argument>%assetic.filter.compass_connector.cache_path%</argument>
             <argument>%assetic.filter.compass_connector.compass_bin%</argument>
-            <argument>%assetic.filter.compass_connector.console%</argument>
+            <argument>%assetic.filter.compass_connector.connector%</argument>
             <call method="setPlugins"><argument>%assetic.filter.compass_connector.plugins%</argument></call>
+            <call method="setHome"><argument>%assetic.filter.compass_connector.ruby.home%</argument></call>
+            <call method="setGeneratedImagesPath"><argument>%assetic.filter.compass_connector.generated_images.path%</argument></call>
+            <call method="setGeneratedImagesWeb"><argument>%assetic.filter.compass_connector.generated_images.web%</argument></call>
+            <call method="setEnvironment"><argument>%assetic.filter.compass_connector.environment%</argument></call>
+            <call method="setVendorsPath"><argument>%assetic.filter.compass_connector.vendors.path%</argument></call>
+            <call method="setVendorsWeb"><argument>%assetic.filter.compass_connector.vendors.web%</argument></call>
+            <call method="setSassRoot"><argument>%assetic.filter.compass_connector.sass_root%</argument></call>
         </service>
     </services>
 </container>
