@@ -10,7 +10,8 @@ class CompassConnectorFilter extends BaseProcessFilter {
 	protected $plugins = array(), $homeDir;
 	protected $cache, $compassBin, $connector, $sassRoot;
 	
-	protected $generatedImagesPath, $generatedImagesWeb, $env, $vendorsPath, $vendorsWeb; 
+	protected $generatedImagesPath, $generatedImagesWeb, $env, $vendorsPath, $vendorsWeb;
+	protected $asseticFix;
 	
 	public function __construct($cachePath, $compassBin, $connector){
 		$this->cache = $cachePath;
@@ -24,6 +25,8 @@ class CompassConnectorFilter extends BaseProcessFilter {
 		
 		$this->sassRoot = $this->cache;
 		$this->env = 'development';
+		
+		$this->asseticFix = false;
 	}
 	
 	public function setPlugins(array $plugins){
@@ -40,6 +43,11 @@ class CompassConnectorFilter extends BaseProcessFilter {
 	public function setGeneratedImagesWeb($uri){
 		$this->generatedImagesWeb = $uri;
 	}
+	
+	public function enableAsseticMtimeFix($set = true){
+		$this->asseticFix = $set;
+	}
+	
 	/**
 	 * production or development
 	 * @param unknown $env
@@ -96,6 +104,10 @@ class CompassConnectorFilter extends BaseProcessFilter {
 		$fpath = $asset->getSourceRoot().'/'.$asset->getSourcePath();
 		$path = strtr($fpath, array(realpath($this->sassRoot)=>''));
 		$path = ltrim($path, "/");
+		
+		if($this->asseticFix){
+			@touch($fpath);
+		}
 		
 		$pb = $this->createProcessBuilder(array($this->compassBin,'compile'));
 		$pb->inheritEnvironmentVariables();
