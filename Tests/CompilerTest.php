@@ -12,6 +12,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase {
 			'/home/arkus/.gem/ruby/1.9.1/bin/compass',
 			__DIR__.'/compiler.php'
 		);
+		$filter->setSassRoot(__DIR__);
 		$asset = new FileAsset(__DIR__.'/Resources/scss/app.scss');
 		$filter->filterDump($asset);
 		$asset->getContent();

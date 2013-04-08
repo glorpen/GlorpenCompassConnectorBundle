@@ -139,7 +139,7 @@ class Connector {
 		if($this->checkAbsoluteUrl($uri)) return $uri;
 		
 		$dir = $this->config['generated_images.web'];
-		return $dir.$uri;
+		return $dir.'/'.$uri;
 	}
 	
 	public function findSpritesMatching($path){
