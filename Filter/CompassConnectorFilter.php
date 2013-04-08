@@ -8,15 +8,15 @@ use Assetic\Asset\AssetInterface;
 class CompassConnectorFilter extends BaseProcessFilter {
 	
 	protected $plugins = array(), $homeDir;
-	protected $cache, $compassBin, $connector, $sassRoot;
+	protected $cache, $compassBin, $connectorClass, $sassRoot;
 	
 	protected $generatedImagesPath, $generatedImagesWeb, $env, $vendorsPath, $vendorsWeb;
 	protected $asseticFix;
 	
-	public function __construct($cachePath, $compassBin, $connector){
+	public function __construct($cachePath, $compassBin, $connectorClass){
 		$this->cache = $cachePath;
 		$this->compassBin = $compassBin;
-		$this->connector = $connector;
+		$this->connectorClass = $connectorClass;
 		
 		$this->generatedImagesPath = $this->cache.'/generatedImages';
 		$this->generatedImagesWeb = "/";
@@ -25,7 +25,7 @@ class CompassConnectorFilter extends BaseProcessFilter {
 		
 		$this->sassRoot = $this->cache;
 		$this->env = 'development';
-		
+		$this->homeDir = getenv("HOME");
 		$this->asseticFix = false;
 	}
 	
@@ -75,16 +75,28 @@ class CompassConnectorFilter extends BaseProcessFilter {
 	public function filterLoad(AssetInterface $asset) {}
 	
 	protected function buildConnector(){
-		$data = file_get_contents($this->connector);
-		$data = strtr($data,array('CONNECTOR_CONFIG' => var_export(array(
-			'cache_path' => $this->cache,
-			'generated_images.path' => $this->generatedImagesPath,
-			'generated_images.web' => $this->generatedImagesWeb,
-			'vendors.path' => $this->vendorsPath,
-			'vendors.web' => $this->vendorsWeb,
-			'sass_root' => $this->sassRoot,
-			'env' => $this->env
-		),true)));
+		$r = new \ReflectionClass($this->connectorClass);
+		$files = array();
+		while($r){
+			$files[] = 'require_once '.var_export($r->getFileName(),true).';';
+			$r = $r->getParentClass();
+		}
+		$files = array_reverse($files);
+		
+		$data = file_get_contents(__DIR__.'/../Templates/connector.php');
+		$data = strtr($data,array(
+			'CONNECTOR_CONFIG' => var_export(array(
+				'cache_path' => $this->cache,
+				'generated_images.path' => $this->generatedImagesPath,
+				'generated_images.web' => $this->generatedImagesWeb,
+				'vendors.path' => $this->vendorsPath,
+				'vendors.web' => $this->vendorsWeb,
+				'sass_root' => $this->sassRoot,
+				'env' => $this->env
+			),true),
+			'CONNECTOR_CLASS' => $this->connectorClass,
+			'CLASS_FILEPATHS;' => implode("\n",$files)
+		));
 		
 		file_put_contents($this->getConnectorPath(), $data);
 	}
@@ -105,7 +117,7 @@ class CompassConnectorFilter extends BaseProcessFilter {
 		$path = strtr($fpath, array(realpath($this->sassRoot)=>''));
 		$path = ltrim($path, "/");
 		
-		if($this->asseticFix){
+		if($this->asseticFix && file_exists($fpath)){
 			@touch($fpath);
 		}
 		

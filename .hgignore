@@ -5,4 +5,5 @@ syntax: regexp
 ^vendor$
 ^Tests/cache/.sass-cache$
 ^Tests/cache/css$
+^Tests/cache/connector.php$
 ^Tests/cache/generated_images/bundles$

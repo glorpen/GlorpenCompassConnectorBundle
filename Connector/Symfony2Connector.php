@@ -1,74 +1,30 @@
 <?php
+namespace Glorpen\CompassConnectorBundle\Connector;
 
-require_once dirname(dirname(__DIR__)).'/bootstrap.php.cache';
-require_once dirname(dirname(__DIR__)).'/AppKernel.php';
+use Glorpen\CompassConnectorBundle\Connector\BaseConnector;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArgvInput;
-
-class Connector {
+class Symfony2Connector extends BaseConnector {
 	
 	protected $config, $kernel;
 	
 	public function __construct(array $config){
-		$this->config = $config;
+		parent::__construct($config);
+	}
+	
+	public function initialize(){
+		$root = '/mnt/sandbox/workspace-php/TendersSystem/app';
+		require_once $root.'/bootstrap.php.cache';
+		require_once $root.'/AppKernel.php';
 	}
 	
 	public function getKernel(){
 		if($this->kernel === null){
-			$this->kernel = new AppKernel('dev', false);
+			$this->kernel = new \AppKernel('dev', false);
 			$this->kernel->init();
 			$this->kernel->boot();
 		}
 		
 		return $this->kernel;
-	}
-	
-	public function writeln($msg){
-		echo $msg."\n";
-	}
-	
-	public static function camelize($id){
-		return preg_replace_callback('/(^|_|\.)+(.)/', function ($match) { return ('.' === $match[1] ? '_' : '').strtoupper($match[2]); }, $id);
-	}
-	
-	public function execute() {
-		while(True){
-			$ret = fgets(STDIN, 4096);
-			if (false === $ret) { //connector was disconnected
-				exit(0);
-			}
-			$line = trim($ret);
-			$d = json_decode($line, true);
-			
-			try {
-				$this->writeln(json_encode(call_user_func_array(array($this, lcfirst(self::camelize($d['method']))), $d['args'])));
-			} catch(\Exception $e){
-				$this->writeln(json_encode(array(
-					'error'=> $e->getMessage()."\n".$e->getTraceAsString()
-				)));
-			}
-		}
-	}
-	
-	protected function checkAbsoluteUrl($url){
-		return preg_match('#^(([a-z0-9]+://)|(//)).*$#', $url) == 1;
-	}
-	protected function checkAppUrl($url){
-		return strncmp($url, "/bundles/", 9)==0;
-	}
-	protected function checkRootUri($uri){
-		return $this->checkAbsoluteUrl($uri) || @$uri[0] == '/';
-	}
-	
-	protected function getVendorsPath(){
-		$dir = $this->config['vendors.path'];
-		return implode(DIRECTORY_SEPARATOR, array_merge(array($dir), func_get_args()));
-	}
-	
-	protected function getVendorsWeb(){
-		$dir = $this->config['vendors.web'];
-		return implode('/', array_merge(array($dir), func_get_args()));
 	}
 	
 	protected function getBundlePath($path){
@@ -139,7 +95,7 @@ class Connector {
 		if($this->checkAbsoluteUrl($uri)) return $uri;
 		
 		$dir = $this->config['generated_images.web'];
-		return $dir.'/'.$uri;
+		return preg_replace('#/+#', '/', $dir.'/'.$uri);
 	}
 	
 	public function findSpritesMatching($path){
@@ -168,15 +124,8 @@ class Connector {
 	}
 	
 	public function getConfiguration(){
-		return array(
-			'project_path' => $this->config['cache_path'],
+		return array_merge(parent::getConfiguration(), array(
 			'sass_path' => dirname($this->getKernel()->getRootDir()),
-			'css_path' => $this->config['cache_path'].'/css',
-			'generated_images_path' => $this->config['generated_images.path'],
-			'environment' => ':'.$this->config['env']
-		);
+		));
 	}
 }
-
-$c = new Connector(CONNECTOR_CONFIG);
-$c->execute();

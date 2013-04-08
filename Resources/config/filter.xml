@@ -9,9 +9,7 @@
         <parameter key="assetic.filter.compass_connector.plugins" type="collection" />
         <parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>
         <parameter key="assetic.filter.compass_connector.compass_bin">/home/arkus/.gem/ruby/1.9.1/bin/compass</parameter>
-        <parameter key="assetic.filter.compass_connector.connector">%kernel.root_dir%/../src/Glorpen/CompassConnectorBundle/bin/symfony2Connector.php</parameter>
-        <parameter key="assetic.filter.compass_connector.ruby.home">/home/arkus</parameter>
-        
+        <parameter key="assetic.filter.compass_connector.connector_class">Glorpen\CompassConnectorBundle\Connector\Symfony2Connector</parameter>
         <parameter key="assetic.filter.compass_connector.vendors.path">%kernel.root_dir%/../web/vendors</parameter>
         <parameter key="assetic.filter.compass_connector.vendors.web">/vendors</parameter>
         <parameter key="assetic.filter.compass_connector.generated_images.path">%kernel.root_dir%/../web/assetic/generated-images</parameter>
@@ -26,9 +24,8 @@
             <tag name="assetic.filter" alias="compass_connector" />
             <argument>%assetic.filter.compass_connector.cache_path%</argument>
             <argument>%assetic.filter.compass_connector.compass_bin%</argument>
-            <argument>%assetic.filter.compass_connector.connector%</argument>
+            <argument>%assetic.filter.compass_connector.connector_class%</argument>
             <call method="setPlugins"><argument>%assetic.filter.compass_connector.plugins%</argument></call>
-            <call method="setHome"><argument>%assetic.filter.compass_connector.ruby.home%</argument></call>
             <call method="setGeneratedImagesPath"><argument>%assetic.filter.compass_connector.generated_images.path%</argument></call>
             <call method="setGeneratedImagesWeb"><argument>%assetic.filter.compass_connector.generated_images.web%</argument></call>
             <call method="setEnvironment"><argument>%assetic.filter.compass_connector.environment%</argument></call>

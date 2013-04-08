@@ -9,10 +9,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase {
 	public function testSomething(){
 		$filter = new CompassConnectorFilter(
 			__DIR__.'/cache',
-			'/home/arkus/.gem/ruby/1.9.1/bin/compass',
-			__DIR__.'/compiler.php'
+			getenv("HOME").'/.gem/ruby/1.9.1/bin/compass',
+			'Glorpen\CompassConnectorBundle\Tests\SymfonyConnectorStub'
 		);
-		$filter->setSassRoot(__DIR__);
+		
+		$filter->setSassRoot(__DIR__.'/..');
+		$filter->setVendorsPath(__DIR__.'/Resources/public/vendors');
+		$filter->setGeneratedImagesPath(__DIR__.'/cache/generated_images');
+		
 		$asset = new FileAsset(__DIR__.'/Resources/scss/app.scss');
 		$filter->filterDump($asset);
 		$asset->getContent();
