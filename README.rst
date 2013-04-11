@@ -119,7 +119,7 @@ Usage
 
 SCSS files should be placed in *SomeBundle/Resources/scss*.
 
-.. sourcecode::css
+.. sourcecode:: css
 
    @import "SomeBundle:settings"; /* will resolve to eg. .../SomeBundle/Resources/scss/_settings.scss */
    @import "foundation"; /* will include foundation scss from your compass instalation */
