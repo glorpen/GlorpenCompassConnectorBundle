@@ -1,4 +1,14 @@
 <?php
+
+/*
+ * This file is part of the GlorpenCompassConnectorBundle package.
+ *
+ * (c) Akradiusz Dzięgiel
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Glorpen\CompassConnectorBundle\Tests;
 
 use Glorpen\CompassConnectorBundle\Connector\Symfony2Connector;
@@ -7,6 +17,9 @@ use Assetic\Asset\FileAsset;
 
 use Glorpen\CompassConnectorBundle\Filter\CompassConnectorFilter;
 
+/**
+ * @author Arkadiusz Dzięgiel
+ */
 class TestBundle {
 	public function getName(){
 		return 'SomeBundle';
@@ -16,6 +29,9 @@ class TestBundle {
 	}
 }
 
+/**
+ * @author Arkadiusz Dzięgiel
+ */
 class TestKernel {
 	public function getBundle(){
 		return new TestBundle();
@@ -28,6 +44,9 @@ class TestKernel {
 	}
 }
 
+/**
+ * @author Arkadiusz Dzięgiel
+ */
 class SymfonyConnectorStub extends Symfony2Connector {
 	public function initialize(){
 		

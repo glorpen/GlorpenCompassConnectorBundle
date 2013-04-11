@@ -8,7 +8,7 @@
         <parameter key="assetic.filter.compass_connector.class">Glorpen\CompassConnectorBundle\Filter\CompassConnectorFilter</parameter>
         <parameter key="assetic.filter.compass_connector.plugins" type="collection" />
         <parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>
-        <parameter key="assetic.filter.compass_connector.compass_bin">/home/arkus/.gem/ruby/1.9.1/bin/compass</parameter>
+        <parameter key="assetic.filter.compass_connector.compass_bin">/usr/bin/compass</parameter>
         <parameter key="assetic.filter.compass_connector.connector_class">Glorpen\CompassConnectorBundle\Connector\Symfony2Connector</parameter>
         <parameter key="assetic.filter.compass_connector.vendors.path">%kernel.root_dir%/../web/vendors</parameter>
         <parameter key="assetic.filter.compass_connector.vendors.web">/vendors</parameter>
