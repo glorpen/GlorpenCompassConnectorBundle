@@ -26,9 +26,9 @@ class Symfony2Connector extends BaseConnector {
 	}
 	
 	public function initialize(){
-		$root = '/mnt/sandbox/workspace-php/TendersSystem/app';
-		require_once $root.'/bootstrap.php.cache';
-		require_once $root.'/AppKernel.php';
+		$root = dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))).DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR;
+		require_once $root.'bootstrap.php.cache';
+		require_once $root.'AppKernel.php';
 	}
 	
 	public function getKernel(){

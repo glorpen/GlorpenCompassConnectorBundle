@@ -2,6 +2,8 @@ syntax: regexp
 ^\.settings$
 ^\.project$
 ^\.buildpath$
+^composer\.lock$
+^composer\.phar$
 ^vendor$
 ^Tests/cache/.sass-cache$
 ^Tests/cache/css$

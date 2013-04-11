@@ -44,6 +44,15 @@ How to install
        }
     }
 
+- add assetic filter config in config.yml
+
+.. sourcecode:: yaml
+
+   assetic:
+       filters:
+           compass_connector:
+              resource: "%kernel.root_dir%/../vendor/glorpen/compass-connector-bundle/Glorpen/CompassConnectorBundle/Resources/config/filter.xml"
+              #apply_to: ".scss$"
 
 Configuration
 =============
