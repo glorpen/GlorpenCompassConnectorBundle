@@ -1,11 +1,12 @@
 syntax: regexp
 ^\.settings$
 ^\.project$
+^\.sass-cache$
 ^\.buildpath$
 ^composer\.lock$
 ^composer\.phar$
 ^vendor$
-^Tests/cache/.sass-cache$
-^Tests/cache/css$
-^Tests/cache/connector.php$
-^Tests/cache/generated_images/bundles$
+^src/Glorpen/Assetic/CompassConnectorBundle/Tests/cache$
+^src/Glorpen/Assetic/CompassConnectorBundle/Tests/logs$
+^src/Glorpen/Assetic/CompassConnectorBundle/Tests/Resources/web/generated-images/vendor-something.*$
+^src/Glorpen/Assetic/CompassConnectorBundle/Tests/Resources/web/generated-images/bundles/test/sprites$

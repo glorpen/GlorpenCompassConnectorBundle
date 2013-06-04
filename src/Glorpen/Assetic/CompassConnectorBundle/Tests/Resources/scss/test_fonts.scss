@@ -1,0 +1,20 @@
+@import "compass/css3/font-face";
+
+font-face-vendor {
+    @include font-face("this name", font-files("vendor_empty.ttf", woff, "vendor_empty.ttf", opentype), "vendor_empty.ttf");
+}
+
+font-face-app {
+    @include font-face("this name", font-files("@TestBundle:public/fonts/empty.ttf", woff, "@TestBundle:public/fonts/empty.ttf", opentype), "@TestBundle:public/fonts/empty.ttf");
+}
+font-face-absolute {
+  @include font-face("this name", font-files("/this.woff", woff, "/this.otf", opentype), "/this.eot");
+}
+
+font-inline-vendor {
+	vendor-inline-font: inline-font-files("vendor_empty.ttf", "truetype");
+}
+
+font-inline-app {
+  app-inline-font: inline-font-files("@TestBundle:public/fonts/empty.ttf", "truetype");
+}

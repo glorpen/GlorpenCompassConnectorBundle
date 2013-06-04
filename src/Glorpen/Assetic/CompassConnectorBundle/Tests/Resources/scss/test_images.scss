@@ -1,0 +1,13 @@
+@import "compass/css3/images";
+
+images {
+    vendor-image-url: image-url("vendor_1x1.png"); 
+    app-image-url: image-url("@TestBundle:public/images/image.png");
+    width-app: image-width("@TestBundle:public/images/image.png");
+    width-vendor: image-width("vendor_image.png");
+    image-inline: inline-image("@TestBundle:public/images/1x1.png");
+    vendor-generated-image-busted: generated-image-url("vendor_1x1.png", true);
+    vendor-generated-image: generated-image-url("vendor_1x1.png", false);
+    generated-image-busted: generated-image-url("@TestBundle:public/1x1.png", true);
+    generated-image: generated-image-url("@TestBundle:public/1x1.png", false); 
+}

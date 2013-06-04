@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="./vendor/autoload.php">
   <php>
+	<server name="KERNEL_DIR" value="src/Glorpen/Assetic/CompassConnectorBundle/Tests" />
   </php>
   <testsuites>
     <testsuite name="GlorpenCompassConnectorBundle Test Suite">
-      <directory suffix="Test.php">./Tests</directory>
+      <directory suffix="Test.php">src/Glorpen/Assetic/CompassConnectorBundle/Tests</directory>
     </testsuite>
   </testsuites>
   <filter>

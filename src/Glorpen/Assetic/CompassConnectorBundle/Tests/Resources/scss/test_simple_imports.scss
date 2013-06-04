@@ -1,0 +1,6 @@
+@import "@TestBundle:scss/css1"; //include
+
+@import "style.css"; //relative as-is
+@import "/style.css"; //absolute as-is
+//@import "@TestBundle:css/style.css" //resolve app url, waiting for upstream
+
