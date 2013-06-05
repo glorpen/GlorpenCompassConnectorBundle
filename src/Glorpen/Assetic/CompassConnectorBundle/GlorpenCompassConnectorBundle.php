@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Glorpen\CompassConnectorBundle;
+namespace Glorpen\Assetic\CompassConnectorBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**

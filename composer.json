@@ -22,7 +22,6 @@
     "autoload": {
         "psr-0": { "Glorpen\\Assetic\\CompassConnectorBundle": "src" }
     },
-    "target-dir": "Glorpen/Assetic/CompassConnectorBundle",
     "suggest": {
         "glorpen/style-embedder-bundle": "Embeds styles into HTML DOM"
     },

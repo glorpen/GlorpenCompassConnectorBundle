@@ -5,34 +5,28 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="assetic.filter.compass_connector.class">Glorpen\CompassConnectorBundle\Filter\CompassConnectorFilter</parameter>
+        <parameter key="assetic.filter.compass_connector.class">Glorpen\Assetic\CompassConnectorFilter\Filter</parameter>
         <parameter key="assetic.filter.compass_connector.plugins" type="collection" />
-        <parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>
+        <!--<parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>-->
         <parameter key="assetic.filter.compass_connector.compass_bin">/usr/bin/compass</parameter>
-        <parameter key="assetic.filter.compass_connector.connector_class">Glorpen\CompassConnectorBundle\Connector\Symfony2Connector</parameter>
-        <parameter key="assetic.filter.compass_connector.vendors.path">%kernel.root_dir%/../web/vendors</parameter>
-        <parameter key="assetic.filter.compass_connector.vendors.web">/vendors</parameter>
-        <parameter key="assetic.filter.compass_connector.generated_images.path">%kernel.root_dir%/../web/assetic/generated-images</parameter>
-        <parameter key="assetic.filter.compass_connector.generated_images.web">/assetic/generated-images</parameter>
         
-        <parameter key="assetic.filter.compass_connector.environment">development</parameter>
-        <parameter key="assetic.filter.compass_connector.sass_root">%kernel.root_dir%/../</parameter>
+        <parameter key="assetic.filter.compass_connector.resolver.class">Glorpen\Assetic\CompassConnectorBundle\Resolver\SymfonyResolver</parameter>
+        <parameter key="assetic.filter.compass_connector.resolver.output_dir">%kernel.root_dir%/../web/compass</parameter>
     </parameters>
 
     <services>
+    	<service id="assetic.filter.compass_connector.resolver" class="%assetic.filter.compass_connector.resolver.class%">
+    		<argument type="service" id="kernel" />
+    		<argument>%assetic.filter.compass_connector.resolver.output_dir%</argument>
+    		<argument type="service" id="templating.helper.assets" strict="false" />
+    	</service>
         <service id="assetic.filter.compass_connector" class="%assetic.filter.compass_connector.class%">
             <tag name="assetic.filter" alias="compass_connector" />
-            <argument>%assetic.filter.compass_connector.cache_path%</argument>
+            <argument type="service" id="assetic.filter.compass_connector.resolver"/>
+            <!--<argument>%assetic.filter.compass_connector.cache_path%</argument>-->
             <argument>%assetic.filter.compass_connector.compass_bin%</argument>
-            <argument>%assetic.filter.compass_connector.connector_class%</argument>
             <call method="setPlugins"><argument>%assetic.filter.compass_connector.plugins%</argument></call>
-            <call method="setGeneratedImagesPath"><argument>%assetic.filter.compass_connector.generated_images.path%</argument></call>
-            <call method="setGeneratedImagesWeb"><argument>%assetic.filter.compass_connector.generated_images.web%</argument></call>
-            <call method="setEnvironment"><argument>%assetic.filter.compass_connector.environment%</argument></call>
-            <call method="setVendorsPath"><argument>%assetic.filter.compass_connector.vendors.path%</argument></call>
-            <call method="setVendorsWeb"><argument>%assetic.filter.compass_connector.vendors.web%</argument></call>
-            <call method="setSassRoot"><argument>%assetic.filter.compass_connector.sass_root%</argument></call>
-            <call method="enableAsseticMtimeFix"><argument>true</argument></call>
+            <!--<call method="setEnvironment"><argument>%assetic.filter.compass_connector.environment%</argument></call>-->
         </service>
     </services>
 </container>
