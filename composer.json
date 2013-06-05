@@ -1,8 +1,9 @@
 {
     "name": "glorpen/compass-connector-bundle",
     "type": "symfony-bundle",
-    "description": "Glorpen CompassConnectorBundle",
-    "keywords": ["Symfony2 bundle for AsseticCompassConnector filter"],
+    "description": "Symfony2 bundle for AsseticCompassConnector filter",
+    "keywords": ["symfony","compass","assetic"],
+    "homepage": "https://bitbucket.org/glorpen/glorpencompassconnectorbundle",
     "license": "GPL-3.0",
     "authors": [
         {

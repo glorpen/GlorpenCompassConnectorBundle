@@ -38,7 +38,7 @@ How to install
        {
            $bundles = array(
                ...
-               new Glorpen\CompassConnectorBundle\GlorpenCompassConnectorBundle(),
+               new Glorpen\Assetic\CompassConnectorBundle\GlorpenCompassConnectorBundle(),
                ...
            );
        }
@@ -51,89 +51,27 @@ How to install
    assetic:
        filters:
            compass_connector:
-              resource: "%kernel.root_dir%/../vendor/glorpen/compass-connector-bundle/Glorpen/CompassConnectorBundle/Resources/config/filter.xml"
+              resource: "%kernel.root_dir%/../vendor/glorpen/compass-connector-bundle/Glorpen/Assetic/CompassConnectorBundle/Resources/config/filter.xml"
               #apply_to: ".scss$"
 
 Configuration
 =============
 
-Constructor:
-
-- cache_path
-
-   **parameter**: *assetic.filter.compass_connector.cache_path*
-   
-   **default value**: `%kernel.root_dir%/cache/compassConnector`
-   
-- compass_bin
-
    **parameter**: *assetic.filter.compass_connector.compass_bin*
    
    **default value**: `/usr/bin/compass`
 
-- connector_class
-
-   **parameter**: *assetic.filter.compass_connector.connector_class*
-   
-   **default value**: `Glorpen\CompassConnectorBundle\Connector\Symfony2Connector`
-
-Methods:
-
-- setPlugins
-
-   **parameter**: *assetic.filter.compass_connector.plugins*
-   
-   **default value**: `array()`
-   
-- setVendorsPath
-   
-   **parameter**: *assetic.filter.compass_connector.vendors.path*
-   
-   **default value**: `%kernel.root_dir%/../web/vendors`
-   
-- setVendorsWeb
-
-   **parameter**: *assetic.filter.compass_connector.vendors.web*
-   
-   **default value**: `/vendors`
-   
-- setGeneratedImagesPath
-
-   **parameter**: *assetic.filter.compass_connector.generated_images.path*
-   
-   **default value**: `%kernel.root_dir%/../web/assetic/generated-images`
-   
-- setGeneratedImagesWeb
-
-   **parameter**: *assetic.filter.compass_connector.generated_images.web*
-   
-   **default value**: `/assetic/generated-images`
-   
-- setEnvironment
-
-   **parameter**: *assetic.filter.compass_connector.environment*
-   
-   **default value**: `development`
-   
-- setSassRoot
-
-   **parameter**: *assetic.filter.compass_connector.sass_root*
-   
-   **default value**: `%kernel.root_dir%/../`
-
-
+TODO
 
 Usage
 =====
 
-SCSS files should be placed in *SomeBundle/Resources/scss*.
-
 .. sourcecode:: css
 
-   @import "SomeBundle:settings"; /* will resolve to eg. .../SomeBundle/Resources/scss/_settings.scss */
+   @import "SomeBundle:scss/settings"; /* will resolve to eg. .../SomeBundle/Resources/scss/_settings.scss */
    @import "foundation"; /* will include foundation scss from your compass instalation */
    
-   image-size("/bundles/some/images/my.png");
-   image-url("/bundles/some/images/my.png");
-   /* paths with /bundles/<bundlename>/ will resolve to Resources/public in respective bundles */
+   image-size("@SomeBundle:images/my.png");
+   image-url("@SomeBundle:images/my.png");
+   /* paths will resolve to Resources/public/... in respective bundles */
 
