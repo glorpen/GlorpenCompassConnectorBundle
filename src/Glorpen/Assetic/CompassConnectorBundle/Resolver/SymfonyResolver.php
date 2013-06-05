@@ -3,19 +3,16 @@ namespace Glorpen\Assetic\CompassConnectorBundle\Resolver;
 
 use Symfony\Component\Finder\Finder;
 
-use Symfony\Component\Templating\Helper\CoreAssetsHelper;
-
 use Symfony\Component\HttpKernel\KernelInterface;
 
 use Glorpen\Assetic\CompassConnectorFilter\Resolver\SimpleResolver;
 
 class SymfonyResolver extends SimpleResolver {
 	
-	protected $kernel, $assetHelper;
+	protected $kernel;
 	
-	public function __construct(KernelInterface $kernel, $outputDir, CoreAssetsHelper $assetHelper) {
+	public function __construct(KernelInterface $kernel, $outputDir) {
 		$this->kernel = $kernel;
-		$this->assetHelper = $assetHelper;
 		
 		parent::__construct(null, $outputDir);
 	}
@@ -102,7 +99,7 @@ class SymfonyResolver extends SimpleResolver {
 		
 		$prefix = $type == 'generated_image'?$this->generatedPrefix:$this->appPrefix;
 		
-		return $this->assetHelper->getUrl($prefix.'/'.$this->getBundleWebPrefix($info->bundle).substr($info->resource, 7).$info->postfix.$vpathFile);
+		return $prefix.'/'.$this->getBundleWebPrefix($info->bundle).substr($info->resource, 7).$info->postfix.$vpathFile;
 	}
 	
 	private function getBundleWebPrefix($name){

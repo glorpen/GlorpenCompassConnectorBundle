@@ -18,7 +18,6 @@
     	<service id="assetic.filter.compass_connector.resolver" class="%assetic.filter.compass_connector.resolver.class%">
     		<argument type="service" id="kernel" />
     		<argument>%assetic.filter.compass_connector.resolver.output_dir%</argument>
-    		<argument type="service" id="templating.helper.assets" strict="false" />
     	</service>
         <service id="assetic.filter.compass_connector" class="%assetic.filter.compass_connector.class%">
             <tag name="assetic.filter" alias="compass_connector" />
