@@ -1,6 +1,8 @@
 <?php
 namespace Glorpen\Assetic\CompassConnectorBundle\Resolver;
 
+use Symfony\Component\Templating\Asset\Package;
+
 use Symfony\Component\Finder\Finder;
 
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -11,8 +13,11 @@ class SymfonyResolver extends SimpleResolver {
 	
 	protected $kernel;
 	
-	public function __construct(KernelInterface $kernel, $outputDir) {
+	public function __construct(KernelInterface $kernel, $outputDir, $scheme, $host, $baseUrl, $vendorPrefix) {
 		$this->kernel = $kernel;
+		
+		$this->setAppPrefix("{$scheme}://{$host}{$baseUrl}");
+		$this->setVendorPrefix($this->appPrefix.$vendorPrefix);
 		
 		parent::__construct(null, $outputDir);
 	}
@@ -53,7 +58,7 @@ class SymfonyResolver extends SimpleResolver {
 		
 		foreach($bundlesToSearch as $bundleName){
 			try{
-				$resourcePath = ($isVendor?'public/vendor/'.$this->{"vendor".ucfirst($type)."sDir"}.'/':'').trim($path,'/');
+				$resourcePath = ($isVendor?'public/'.$this->vendorDir.'/'.$this->{"vendor".ucfirst($type)."sDir"}.'/':'').trim($path,'/');
 				$filePath = $this->kernel->locateResource('@'.$bundleName.'/Resources/'.$resourcePath);
 				
 				return (object) array(
