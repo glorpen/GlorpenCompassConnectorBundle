@@ -71,7 +71,7 @@ Usage
    @import "SomeBundle:scss/settings"; /* will resolve to eg. .../SomeBundle/Resources/scss/_settings.scss */
    @import "foundation"; /* will include foundation scss from your compass instalation */
    
-   image-size("@SomeBundle:images/my.png");
-   image-url("@SomeBundle:images/my.png");
+   image-size("@SomeBundle:public/images/my.png");
+   image-url("@SomeBundle:public/images/my.png");
    /* paths will resolve to Resources/public/... in respective bundles */
 
