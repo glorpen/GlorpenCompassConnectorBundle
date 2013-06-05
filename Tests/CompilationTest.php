@@ -33,13 +33,13 @@ class CompilationTest extends WebTestCase {
 		$resolver = new SymfonyResolver(
 				$this->myKernel,
 				implode(DIRECTORY_SEPARATOR,array(__DIR__,'Resources','web')),
-				new CoreAssetsHelper(new PathPackage()) // 'templating.helper.assets'
+				'http', 'test.host.com', '/some-prefix', 'vendor'
 		);
 	
 		$css = new AssetCollection(array(
 				new FileAsset(implode(DIRECTORY_SEPARATOR, array(__DIR__,'Resources','scss',$filename))),
 		), array(
-				new Filter($resolver, '/home/arkus/.gem/ruby/1.9.1/bin/compass')
+				new Filter($resolver, __DIR__.'/cache','/home/arkus/.gem/ruby/1.9.1/bin/compass')
 		));
 		return $css;
 	}
@@ -70,14 +70,14 @@ class CompilationTest extends WebTestCase {
 		$css = $this->getAssetCollection('test_images.scss');
 		$out = $css->dump();
 	
-		$this->assertContains("'/the-app/bundles/test/vendor/images/vendor_1x1.png?1370264927'", $out);
-		$this->assertContains("'/the-app/bundles/test/images/image.png?1370264907'", $out);
+		$this->assertContains("'http:/test.host.com/some-prefix/bundles/test/vendor/images/vendor_1x1.png?1370450661'", $out);
+		$this->assertContains("'http:/test.host.com/some-prefix/bundles/test/images/image.png?1370450661'", $out);
 		$this->assertContains('width-app: 10px;', $out);
 		$this->assertContains('width-vendor: 10px;', $out);
 		$this->assertContains("image-inline: url('data:image/png;base64,", $out);
-		$this->assertContains("vendor-generated-image-busted: url('/generated/vendor_1x1.png?1365281369'", $out);
+		$this->assertContains("vendor-generated-image-busted: url('/generated/vendor_1x1.png?1370450661'", $out);
 		$this->assertContains("vendor-generated-image: url('/generated/vendor_1x1.png'", $out);
-		$this->assertContains("generated-image-busted: url('/generated/bundles/test/1x1.png?1365281369'", $out);
+		$this->assertContains("generated-image-busted: url('/generated/bundles/test/1x1.png?1370450661'", $out);
 		$this->assertContains("generated-image: url('/generated/bundles/test/1x1.png'", $out);
 	}
 	
