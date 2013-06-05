@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="assetic.filter.compass_connector.class">Glorpen\Assetic\CompassConnectorFilter\Filter</parameter>
         <parameter key="assetic.filter.compass_connector.plugins" type="collection" />
-        <!--<parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>-->
+        <parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>
         <parameter key="assetic.filter.compass_connector.compass_bin">/usr/bin/compass</parameter>
         
         <parameter key="assetic.filter.compass_connector.resolver.class">Glorpen\Assetic\CompassConnectorBundle\Resolver\SymfonyResolver</parameter>
@@ -22,7 +22,7 @@
         <service id="assetic.filter.compass_connector" class="%assetic.filter.compass_connector.class%">
             <tag name="assetic.filter" alias="compass_connector" />
             <argument type="service" id="assetic.filter.compass_connector.resolver"/>
-            <!--<argument>%assetic.filter.compass_connector.cache_path%</argument>-->
+            <argument>%assetic.filter.compass_connector.cache_path%</argument>
             <argument>%assetic.filter.compass_connector.compass_bin%</argument>
             <call method="setPlugins"><argument>%assetic.filter.compass_connector.plugins%</argument></call>
             <!--<call method="setEnvironment"><argument>%assetic.filter.compass_connector.environment%</argument></call>-->
