@@ -2,12 +2,29 @@
 GlorpenCompassConnectorBundle
 -----------------------------
 
-Provides Compass integration with Symfony2 project and possibly any other PHP framework - bundle could be used as standalone assetic filter.
+The better Compass integration for Symfony2.
+
+For forking and other funnies:
+
+- https://bitbucket.org/glorpen/glorpencompassconnectorbundle
+- https://github.com/glorpen/GlorpenCompassConnectorBundle
+
+What problems it is solving?
+============================
+
+This bundle:
+
+- adds bundle namespace for compass files - so you can do cross bundle imports or use assets from other bundle
+
+  - ... and it should enable distributing bundles with compass assets
+
+- you don't need installed assets in `your_app/web` - connector uses files from eg. `SomeBundle/Resources` dir
+- assets recompiling/updating when any of its dependencies are modified - be it another import, inlined font file or just `width: image-width(@SomeBundle:public/myimage.png);`
 
 How to install
 ==============
 
-- first, you need to install connector for ruby side:
+- first, you need to install ruby connector gem:
 
 .. sourcecode:: bash
 
@@ -52,26 +69,28 @@ How to install
        filters:
            compass_connector:
               resource: "%kernel.root_dir%/../vendor/glorpen/compass-connector-bundle/Glorpen/Assetic/CompassConnectorBundle/Resources/config/filter.xml"
-              #apply_to: ".scss$"
-
-Configuration
-=============
-
-   **parameter**: *assetic.filter.compass_connector.compass_bin*
-   
-   **default value**: `/usr/bin/compass`
-
-TODO
+              #apply_to: ".scss$" # uncomment to auto-apply to all scss assets
 
 Usage
 =====
 
+There are three kind of "paths":
+
+- app: looks like `@MyBundle:public/images/asset.png`
+- vendor: a relative path, should be used only by compass plugins (eg. zurb-foundation, blueprint)
+- absolute path: starts with `/`, `http://` etc. and will NOT be changed by connector
+
+Some examples:
+
 .. sourcecode:: css
 
-   @import "SomeBundle:scss/settings"; /* will resolve to eg. .../SomeBundle/Resources/scss/_settings.scss */
+   @import "SomeBundle:scss/settings"; /* will resolve to src/SomeBundle/Resources/scss/_settings.scss */
    @import "foundation"; /* will include foundation scss from your compass instalation */
    
-   image-size("@SomeBundle:public/images/my.png");
-   image-url("@SomeBundle:public/images/my.png");
-   /* paths will resolve to Resources/public/... in respective bundles */
+   width: image-size("@SomeBundle:public/images/my.png"); // will output image size of SomeBundle/Resources/public/images/my.png
+   background-image: image-url("@SomeBundle:public/images/my.png"); // will generate url with prefixes given by Symfony2 config
+   @import "@SomeBundle:sprites/*.png"; // will import sprites located in src/SomeBundle/Resources/sprites/
+
+
+This bundle uses Assetic and its filter name is `compass_connector`.
 
