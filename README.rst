@@ -18,8 +18,8 @@ This bundle:
 
   - ... and it should enable distributing bundles with compass assets
 
-- you don't need installed assets in `your_app/web` - connector uses files from eg. `SomeBundle/Resources` dir
-- assets recompiling/updating when any of its dependencies are modified - be it another import, inlined font file or just `width: image-width(@SomeBundle:public/myimage.png);`
+- you don't need installed assets in ``your_app/web`` - connector uses files from eg. ``SomeBundle/Resources`` dir
+- assets recompiling/updating when any of its dependencies are modified - be it another import, inlined font file or just ``width: image-width(@SomeBundle:public/myimage.png);``
 
 How to install
 ==============
@@ -76,9 +76,9 @@ Usage
 
 There are three kind of "paths":
 
-- app: looks like `@MyBundle:public/images/asset.png`
+- app: looks like ``@MyBundle:public/images/asset.png``
 - vendor: a relative path, should be used only by compass plugins (eg. zurb-foundation, blueprint)
-- absolute path: starts with `/`, `http://` etc. and will NOT be changed by connector
+- absolute path: starts with ``/``, ``http://`` etc. and will NOT be changed by connector
 
 Some examples:
 
@@ -92,5 +92,5 @@ Some examples:
    @import "@SomeBundle:sprites/*.png"; // will import sprites located in src/SomeBundle/Resources/sprites/
 
 
-This bundle uses Assetic and its filter name is `compass_connector`.
+This bundle uses Assetic and its filter name is ``compass_connector``.
 
