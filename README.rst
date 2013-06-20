@@ -9,7 +9,7 @@ For forking and other funnies:
 - https://bitbucket.org/glorpen/glorpencompassconnectorbundle
 - https://github.com/glorpen/GlorpenCompassConnectorBundle
 
-What problems it is solving?
+What problems is it solving?
 ============================
 
 This bundle:
@@ -84,7 +84,7 @@ Some examples:
 
 .. sourcecode:: css
 
-   @import "SomeBundle:scss/settings"; /* will resolve to src/SomeBundle/Resources/scss/_settings.scss */
+   @import "@SomeBundle:scss/settings"; /* will resolve to src/SomeBundle/Resources/scss/_settings.scss */
    @import "foundation"; /* will include foundation scss from your compass instalation */
    
    width: image-size("@SomeBundle:public/images/my.png"); // will output image size of SomeBundle/Resources/public/images/my.png
