@@ -70,14 +70,14 @@ class CompilationTest extends WebTestCase {
 		$css = $this->getAssetCollection('test_images.scss');
 		$out = $css->dump();
 	
-		$this->assertContains("'http://test.host.com/some-prefix/bundles/test/vendor/images/vendor_1x1.png?1370450661'", $out);
-		$this->assertContains("'http://test.host.com/some-prefix/bundles/test/images/image.png?1370450661'", $out);
+		$this->assertContains("'http://test.host.com/some-prefix/bundles/test/vendor/images/vendor_1x1.png?", $out);
+		$this->assertContains("'http://test.host.com/some-prefix/bundles/test/images/image.png?", $out);
 		$this->assertContains('width-app: 10px;', $out);
 		$this->assertContains('width-vendor: 10px;', $out);
 		$this->assertContains("image-inline: url('data:image/png;base64,", $out);
-		$this->assertContains("vendor-generated-image-busted: url('/generated/vendor_1x1.png?1370450661'", $out);
+		$this->assertContains("vendor-generated-image-busted: url('/generated/vendor_1x1.png?", $out);
 		$this->assertContains("vendor-generated-image: url('/generated/vendor_1x1.png'", $out);
-		$this->assertContains("generated-image-busted: url('/generated/bundles/test/1x1.png?1370450661'", $out);
+		$this->assertContains("generated-image-busted: url('/generated/bundles/test/1x1.png?", $out);
 		$this->assertContains("generated-image: url('/generated/bundles/test/1x1.png'", $out);
 	}
 	
