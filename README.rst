@@ -87,10 +87,9 @@ Some examples:
    @import "@SomeBundle:scss/settings"; /* will resolve to src/SomeBundle/Resources/scss/_settings.scss */
    @import "foundation"; /* will include foundation scss from your compass instalation */
    
-   width: image-size("@SomeBundle:public/images/my.png"); // will output image size of SomeBundle/Resources/public/images/my.png
-   background-image: image-url("@SomeBundle:public/images/my.png"); // will generate url with prefixes given by Symfony2 config
-   @import "@SomeBundle:sprites/*.png"; // will import sprites located in src/SomeBundle/Resources/sprites/
+   width: image-size("@SomeBundle:public/images/my.png"); /* will output image size of SomeBundle/Resources/public/images/my.png */
+   background-image: image-url("@SomeBundle:public/images/my.png"); /* will generate url with prefixes given by Symfony2 config */
+   @import "@SomeBundle:sprites/*.png"; /* will import sprites located in src/SomeBundle/Resources/sprites/ */
 
 
-This bundle uses Assetic and its filter name is ``compass_connector``.
-
+This bundle uses Assetic and CompassConnector filter name is ``compass_connector``.
