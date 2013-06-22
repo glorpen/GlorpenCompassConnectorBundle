@@ -70,8 +70,8 @@ class CompilationTest extends WebTestCase {
 		$css = $this->getAssetCollection('test_images.scss');
 		$out = $css->dump();
 	
-		$this->assertContains("'http:/test.host.com/some-prefix/bundles/test/vendor/images/vendor_1x1.png?1370450661'", $out);
-		$this->assertContains("'http:/test.host.com/some-prefix/bundles/test/images/image.png?1370450661'", $out);
+		$this->assertContains("'http://test.host.com/some-prefix/bundles/test/vendor/images/vendor_1x1.png?1370450661'", $out);
+		$this->assertContains("'http://test.host.com/some-prefix/bundles/test/images/image.png?1370450661'", $out);
 		$this->assertContains('width-app: 10px;', $out);
 		$this->assertContains('width-vendor: 10px;', $out);
 		$this->assertContains("image-inline: url('data:image/png;base64,", $out);
