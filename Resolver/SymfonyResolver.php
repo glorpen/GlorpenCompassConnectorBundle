@@ -38,6 +38,19 @@ class SymfonyResolver extends SimpleResolver {
 		return $ret;
 	}
 	
+	private function resolveAppPath($path, $postfix){
+		$appResources = $this->kernel->getRootDir().'/Resources';
+		$finder = Finder::create()->in($appResources)->files()->path(trim($path,'/'));
+		foreach($finder as $f){
+			return (object) array(
+					'resource' => null,
+					'path' => $f->getPathname(),
+					'bundle' => null,
+					'postfix' => $postfix
+			);
+		}
+	}
+	
 	protected function resolveVPath($vpath, $isVendor, $type=null){
 		
 		$postfix = '';
@@ -45,22 +58,27 @@ class SymfonyResolver extends SimpleResolver {
 			list($vpath, $postfix) = explode('?', $vpath);
 		}
 		
+		$appResources = $this->kernel->getRootDir().'/Resources';
 		$bundlesToSearch = array();
+		
 		if($isVendor){
 			$path = $vpath;
 			foreach($this->kernel->getBundles() as $b){
 				$bundlesToSearch[] = $b->getName();
 			}
 		} else {
-			list($bundle, $path) = explode(':', $vpath,2);
-			$bundlesToSearch[] = $bundle;
+			if(strpos($vpath, ':') === false){ //global resource path
+				return $this->resolveAppPath($vpath, $postfix);
+			} else { //bundle path
+				list($bundle, $path) = explode(':', $vpath,2);
+				$bundlesToSearch[] = $bundle;
+			}
 		}
 		
 		foreach($bundlesToSearch as $bundleName){
 			try{
-				$dir = $this->kernel->getRootDir().'/Resources';
 				$resourcePath = ($isVendor?'public/'.$this->vendorDir.'/'.$this->{"vendor".ucfirst($type)."sDir"}.'/':'').trim($path,'/');
-				$filePath = $this->kernel->locateResource('@'.$bundleName.'/Resources/'.$resourcePath, $dir, true);
+				$filePath = $this->kernel->locateResource('@'.$bundleName.'/Resources/'.$resourcePath, $appResources, true);
 				
 				return (object) array(
 						'resource' => $resourcePath,
@@ -75,14 +93,10 @@ class SymfonyResolver extends SimpleResolver {
 		}
 	}
 	
-	protected function resolveBundlePath($vpath, $isVendor, $type=null){
+	public function getFilePath($vpath, $isVendor, $type){
 		if($r=$this->resolveVPath($vpath, $isVendor, $type)){
 			return $r->path;
 		}
-	}
-	
-	public function getFilePath($vpath, $isVendor, $type){
-		return $this->resolveBundlePath($vpath, $isVendor, $type);
 	}
 	
 	public function getUrl($vpath, $isVendor, $type){
@@ -98,9 +112,9 @@ class SymfonyResolver extends SimpleResolver {
 		
 		$info = $this->resolveVPath($vpath, $isVendor, $type);
 		
-		if(!$info) throw new \RuntimeException();
-		if(strpos($info->resource,'public')!==0){
-			throw new \RuntimeException();
+		if(!$info) throw new \RuntimeException(sprintf('Could not resolve "%s"', $vpath));
+		if(strpos($info->resource,'public')!==0 || $info->bundle === null){
+			throw new \RuntimeException(sprintf('Resolved path for "%s" is not public', $vpath));
 		}
 		
 		$prefix = $type == 'generated_image'?$this->generatedPrefix:$this->appPrefix;
@@ -112,7 +126,7 @@ class SymfonyResolver extends SimpleResolver {
 		return 'bundles/'.strtolower(substr($name,0,-6)).'/';
 	}
 	
-	public function getOutFilePath($vpath, $type, $isVendor){
+	public function getOutFilePath($vpath, $type, $isVendor){ //TODO if path is app/Resources
 		
 		if(!$isVendor){
 			list($bundle, $path) = explode(':', $vpath,2);

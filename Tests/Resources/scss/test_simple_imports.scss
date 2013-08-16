@@ -4,3 +4,4 @@
 @import "/style.css"; //absolute as-is
 //@import "@TestBundle:css/style.css" //resolve app url, waiting for upstream
 
+@import "@scss/global"; //app resource dir

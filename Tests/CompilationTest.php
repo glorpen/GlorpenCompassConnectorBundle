@@ -39,7 +39,7 @@ class CompilationTest extends WebTestCase {
 		$css = new AssetCollection(array(
 				new FileAsset(implode(DIRECTORY_SEPARATOR, array(__DIR__,'Resources','scss',$filename))),
 		), array(
-				new Filter($resolver, __DIR__.'/cache','/home/arkus/.gem/ruby/1.9.1/bin/compass')
+				new Filter($resolver, __DIR__.'/cache',$_SERVER['HOME'].'/.gem/ruby/1.9.1/bin/compass')
 		));
 		return $css;
 	}
@@ -51,7 +51,9 @@ class CompilationTest extends WebTestCase {
 	
 	public function testSimpleImport(){
 		$css = $this->getAssetCollection('test_simple_imports.scss');
-		$this->assertContains('color: red', $css->dump());
+		$data = $css->dump();
+		$this->assertContains('color: red', $data);
+		$this->assertContains('app-resource', $data);
 	}
 	
 	public function testFonts(){

@@ -8,7 +8,9 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
 class TestBundle extends Bundle {
-	
+	public function getPath() {
+		return __DIR__.'/TestBundle';
+	}
 }
 
 class TestKernel extends Kernel {
