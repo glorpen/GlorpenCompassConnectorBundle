@@ -20,6 +20,7 @@ This bundle:
 
 - you don't need installed assets in ``your_app/web`` - connector uses files from eg. ``SomeBundle/Resources`` dir
 - assets recompiling/updating when any of its dependencies are modified - be it another import, inlined font file or just ``width: image-width(@SomeBundle:public/myimage.png);``
+- for referencing files inside ``app/Resources`` dir use just ``@somefile.png`` (sprites, inline images, scss imports)
 
 How to install
 ==============
@@ -74,9 +75,10 @@ How to install
 Usage
 =====
 
-There are three kind of "paths":
+There are four kind of "paths":
 
 - app: looks like ``@MyBundle:public/images/asset.png``
+- app global: cannot be converted to URL, looks like ``@data/image.png`` and will resolve to ``app/Resources/data/image.png``
 - vendor: a relative path, should be used only by compass plugins (eg. zurb-foundation, blueprint)
 - absolute path: starts with ``/``, ``http://`` etc. and will NOT be changed by connector
 
