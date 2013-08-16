@@ -58,8 +58,9 @@ class SymfonyResolver extends SimpleResolver {
 		
 		foreach($bundlesToSearch as $bundleName){
 			try{
+				$dir = $this->kernel->getRootDir().'/Resources';
 				$resourcePath = ($isVendor?'public/'.$this->vendorDir.'/'.$this->{"vendor".ucfirst($type)."sDir"}.'/':'').trim($path,'/');
-				$filePath = $this->kernel->locateResource('@'.$bundleName.'/Resources/'.$resourcePath);
+				$filePath = $this->kernel->locateResource('@'.$bundleName.'/Resources/'.$resourcePath, $dir, true);
 				
 				return (object) array(
 						'resource' => $resourcePath,
