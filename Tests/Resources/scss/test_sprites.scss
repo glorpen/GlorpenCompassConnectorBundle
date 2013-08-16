@@ -3,3 +3,6 @@
 
 @import "vendor-something/*.png";
 @include vendor-something-sprites(red);
+
+@import "@images/app-something/*.png";
+@include app-something-sprites(red);

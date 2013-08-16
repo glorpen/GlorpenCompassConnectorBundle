@@ -81,6 +81,7 @@ class CompilationTest extends WebTestCase {
 		$this->assertContains("vendor-generated-image: url('/generated/vendor_1x1.png'", $out);
 		$this->assertContains("generated-image-busted: url('/generated/bundles/test/1x1.png?", $out);
 		$this->assertContains("generated-image: url('/generated/bundles/test/1x1.png'", $out);
+		$this->assertContains('width-app-resource: 10px;', $out);
 	}
 	
 	public function testSprites(){
@@ -89,5 +90,6 @@ class CompilationTest extends WebTestCase {
 	
 		$this->assertContains('/generated/bundles/test/sprites/something-s3c0fcffb3c.png', $out);
 		$this->assertContains('/generated/vendor-something-sf004878b50.png', $out);
+		$this->assertContains('/generated/global/images/app-something-se5beb1abac.png', $out);
 	}
 }

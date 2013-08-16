@@ -9,5 +9,7 @@ images {
     vendor-generated-image-busted: generated-image-url("vendor_1x1.png", true);
     vendor-generated-image: generated-image-url("vendor_1x1.png", false);
     generated-image-busted: generated-image-url("@TestBundle:public/1x1.png", true);
-    generated-image: generated-image-url("@TestBundle:public/1x1.png", false); 
+    generated-image: generated-image-url("@TestBundle:public/1x1.png", false);
+    
+    width-app-resource: image-width("@images/image.png");
 }
