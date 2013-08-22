@@ -19,9 +19,7 @@
     	<service id="assetic.filter.compass_connector.resolver" class="%assetic.filter.compass_connector.resolver.class%">
     		<argument type="service" id="kernel" />
     		<argument>%assetic.filter.compass_connector.resolver.output_dir%</argument>
-    		<argument>%router.request_context.scheme%</argument>
-    		<argument>%router.request_context.host%</argument>
-    		<argument>%router.request_context.base_url%</argument>
+    		<argument type="service" id="templating.asset.default_package"></argument>
     		<argument>%assetic.filter.compass_connector.resolver.vendor_prefix%</argument>
     	</service>
         <service id="assetic.filter.compass_connector" class="%assetic.filter.compass_connector.class%">

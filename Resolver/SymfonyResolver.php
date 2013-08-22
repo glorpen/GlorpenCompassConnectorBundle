@@ -1,7 +1,7 @@
 <?php
 namespace Glorpen\Assetic\CompassConnectorBundle\Resolver;
 
-use Symfony\Component\Templating\Asset\Package;
+use Symfony\Component\Templating\Asset\PackageInterface;
 
 use Symfony\Component\Finder\Finder;
 
@@ -13,10 +13,12 @@ class SymfonyResolver extends SimpleResolver {
 	
 	protected $kernel;
 	
-	public function __construct(KernelInterface $kernel, $outputDir, $scheme, $host, $baseUrl, $vendorPrefix) {
+	public function __construct(KernelInterface $kernel, $outputDir, $assetPackage, $vendorPrefix) {
 		$this->kernel = $kernel;
 		
-		$this->setAppPrefix("{$scheme}://{$host}{$baseUrl}");
+		//"{$scheme}://{$host}{$baseUrl}"
+		$prefix = current(explode('?',$assetPackage->getUrl('')));
+		$this->setAppPrefix($prefix);
 		$this->setVendorPrefix($this->appPrefix.$vendorPrefix);
 		
 		parent::__construct(null, $outputDir);
