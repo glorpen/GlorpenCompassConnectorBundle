@@ -39,7 +39,7 @@ class CompilationTest extends WebTestCase {
 		$resolver = new SymfonyResolver(
 				$this->myKernel,
 				implode(DIRECTORY_SEPARATOR,array(__DIR__,'Resources','web')),
-				$package, 'vendor'
+				'vendor', $package
 		);
 	
 		$css = new AssetCollection(array(

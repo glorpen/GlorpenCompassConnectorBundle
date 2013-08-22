@@ -80,6 +80,8 @@ which belongs to a narrower scope. Generally, it is safer to either move "asseti
 rely on the provider pattern by injecting the container itself, and requesting the service "templating.asset.default_package" each time it is needed.
 In rare, special cases however that might not be necessary, then you can set the reference to strict=false to get rid of this error.*
 
+... or if you just want to change generated assets url (for eg. CDN).
+
 You need to add following configuration to you project (remember to change urls):
 
 .. sourcecode:: yaml

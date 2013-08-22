@@ -1,6 +1,12 @@
 <?php
 namespace Glorpen\Assetic\CompassConnectorBundle\Resolver;
 
+use Symfony\Component\DependencyInjection\Exception\ScopeWideningInjectionException;
+
+use Symfony\Component\DependencyInjection\Exception\LogicException;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 use Symfony\Component\Templating\Asset\PackageInterface;
 
 use Symfony\Component\Finder\Finder;
@@ -12,14 +18,19 @@ use Glorpen\Assetic\CompassConnectorFilter\Resolver\SimpleResolver;
 class SymfonyResolver extends SimpleResolver {
 	
 	protected $kernel;
+	protected $container;
 	
-	public function __construct(KernelInterface $kernel, $outputDir, PackageInterface $assetPackage, $vendorPrefix) {
+	public function __construct(KernelInterface $kernel, $outputDir, $vendorPrefix, PackageInterface $asseticPackage = null) {
 		$this->kernel = $kernel;
+		$this->vendorPrefixPath = $vendorPrefix;
 		
-		//"{$scheme}://{$host}{$baseUrl}"
-		$prefix = current(explode('?',$assetPackage->getUrl('')));
-		$this->setAppPrefix($prefix);
-		$this->setVendorPrefix($this->appPrefix.$vendorPrefix);
+		if($asseticPackage){
+			$appPrefix = current(explode('?',$asseticPackage->getUrl('')));
+		} else {
+			$appPrefix = '';
+		}
+		$this->setAppPrefix($appPrefix);
+		$this->setVendorPrefix($appPrefix.$vendorPrefix);
 		
 		parent::__construct(null, $outputDir);
 	}
