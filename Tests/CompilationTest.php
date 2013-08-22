@@ -41,7 +41,7 @@ class CompilationTest extends WebTestCase {
 				implode(DIRECTORY_SEPARATOR,array(__DIR__,'Resources','web')),
 				'vendor', $package
 		);
-	
+		
 		$css = new AssetCollection(array(
 				new FileAsset(implode(DIRECTORY_SEPARATOR, array(__DIR__,'Resources','scss',$filename))),
 		), array(
@@ -93,6 +93,9 @@ class CompilationTest extends WebTestCase {
 		$this->assertContains("width-abs-image: 10px;", $out);
 	}
 
+	/**
+	 * @group asd
+	 */
 	public function testSprites(){
 		$css = $this->getAssetCollection('test_sprites.scss');
 		$out = $css->dump();
@@ -100,6 +103,6 @@ class CompilationTest extends WebTestCase {
 		$this->assertContains('http://test.host.com/some-prefix/generated/bundles/test/sprites/something-s3c0fcffb3c.png', $out);
 		$this->assertContains('http://test.host.com/some-prefix/generated/vendor-something-sf004878b50.png', $out);
 		$this->assertContains('http://test.host.com/some-prefix/generated/global/images/app-something-se5beb1abac.png', $out);
-		$this->assertContains('http://test.host.com/some-prefix/generated/global/images/abs-sprites-s827bde42e1.png', $out);
+		$this->assertContains('http://test.host.com/some-prefix/generated/web/images/abs-sprites-s827bde42e1.png', $out);
 	}
 }

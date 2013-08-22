@@ -109,7 +109,7 @@ class SymfonyResolver extends SimpleResolver {
 				break;
 			case CompassProcess::MODE_ABSOLUTE:
 				$respath = trim($vpath,'/');
-				$realpath = $this->publicDir.'/'.$respath;
+				$realpath = $this->publicDir.($type == CompassProcess::TYPE_GENERATED_IMAGE?$this->generatedDir:'').'/'.$respath;
 				return (object) array(
 						'resource' => $respath,
 						'path' => $realpath,
@@ -167,11 +167,11 @@ class SymfonyResolver extends SimpleResolver {
 		
 		$prefix = $this->appPrefix.($isGeneratedImage?$this->generatedPrefix:'');
 		
-		var_dump($info);
+		$isAbsolute = $mode == CompassProcess::MODE_ABSOLUTE;
 		if($isGeneratedImage && $info->bundle === null){
-			$dirpath = 'global/'.$info->resource; //sprites from app/Resource or web/
-		} elseif ($mode == CompassProcess::MODE_ABSOLUTE){
-			$dirpath = trim($vpath,'/');
+			$dirpath = ($isAbsolute?'web/':'global/').$info->resource; //sprites from app/Resource
+		} elseif ($isAbsolute){
+			$dirpath = trim($vpath,'/'); //files and sprites from /web
 		} else {
 			$dirpath = $this->getBundleWebPrefix($info->bundle).substr($info->resource, 7);
 		}
@@ -183,18 +183,20 @@ class SymfonyResolver extends SimpleResolver {
 		return 'bundles/'.strtolower(substr($name,0,-6)).'/';
 	}
 	
-	public function getOutFilePath($vpath, $type, $isVendor){
-		
-		if(!$isVendor){
-			if(strpos($vpath, ':') === false){ //global resource path
-				return $this->outputDir.'/'.$this->generatedDir.'/global/'.$vpath;
-			} else {
-				list($bundle, $path) = explode(':', $vpath,2);
-				$info = $this->resolveVPath($bundle.':', CompassProcess::MODE_APP, null);
-				return $this->outputDir.'/'.$this->generatedDir.'/'.$this->getBundleWebPrefix($info->bundle).preg_replace('#.*?public/#','/', $path);
-			}
-		} else {
-			return parent::getOutFilePath($vpath, $type, $isVendor);
+	public function getOutFilePath($vpath, $type, $mode){
+		switch($mode){
+			case CompassProcess::MODE_VENDOR:
+				return parent::getOutFilePath($vpath, $type, $mode);
+			case CompassProcess::MODE_APP:
+				if(strpos($vpath, ':') === false){ //global resource path
+					return $this->outputDir.'/'.$this->generatedDir.'/global/'.$vpath;
+				} else {
+					list($bundle, $path) = explode(':', $vpath,2);
+					$info = $this->resolveVPath($bundle.':', CompassProcess::MODE_APP, null);
+					return $this->outputDir.'/'.$this->generatedDir.'/'.$this->getBundleWebPrefix($info->bundle).preg_replace('#.*?public/#','/', $path);
+				}
+			case CompassProcess::MODE_ABSOLUTE:
+				return $this->outputDir.'/'.$this->generatedDir.'/web/'.$vpath;
 		}
 	}
 }
