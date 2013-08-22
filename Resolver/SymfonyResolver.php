@@ -13,7 +13,7 @@ class SymfonyResolver extends SimpleResolver {
 	
 	protected $kernel;
 	
-	public function __construct(KernelInterface $kernel, $outputDir, $assetPackage, $vendorPrefix) {
+	public function __construct(KernelInterface $kernel, $outputDir, PackageInterface $assetPackage, $vendorPrefix) {
 		$this->kernel = $kernel;
 		
 		//"{$scheme}://{$host}{$baseUrl}"

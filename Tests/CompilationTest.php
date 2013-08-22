@@ -30,10 +30,16 @@ class CompilationTest extends WebTestCase {
 			$this->myKernel->boot();
 		}
 		
+		$package = $this->getMockBuilder('Symfony\Component\Templating\Asset\PackageInterface')
+		->getMockForAbstractClass();
+		
+		$package->expects($this->any())
+		->method('getUrl')->will($this->returnValue('http://test.host.com/some-prefix'));
+		
 		$resolver = new SymfonyResolver(
 				$this->myKernel,
 				implode(DIRECTORY_SEPARATOR,array(__DIR__,'Resources','web')),
-				'http', 'test.host.com', '/some-prefix', 'vendor'
+				$package, 'vendor'
 		);
 	
 		$css = new AssetCollection(array(
