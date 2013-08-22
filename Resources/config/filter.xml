@@ -13,6 +13,7 @@
         <parameter key="assetic.filter.compass_connector.resolver.class">Glorpen\Assetic\CompassConnectorBundle\Resolver\SymfonyResolver</parameter>
         <parameter key="assetic.filter.compass_connector.resolver.output_dir">%kernel.root_dir%/../web/compass</parameter>
         <parameter key="assetic.filter.compass_connector.resolver.vendor_prefix">vendors</parameter>
+        <parameter key="assetic.filter.compass_connector.resolver.public_dir">%kernel.root_dir%/../web</parameter>
     </parameters>
 
     <services>
@@ -21,6 +22,7 @@
     		<argument>%assetic.filter.compass_connector.resolver.output_dir%</argument>
     		<argument>%assetic.filter.compass_connector.resolver.vendor_prefix%</argument>
     		<argument type="service" id="templating.asset.default_package" on-invalid="null" strict="false"></argument>
+    		<call method="setPublicDir"><argument>%assetic.filter.compass_connector.resolver.public_dir%</argument></call>
     	</service>
         <service id="assetic.filter.compass_connector" class="%assetic.filter.compass_connector.class%">
             <tag name="assetic.filter" alias="compass_connector" />

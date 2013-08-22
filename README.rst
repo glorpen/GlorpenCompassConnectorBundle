@@ -96,10 +96,11 @@ You need to add following configuration to you project (remember to change urls)
 Usage
 =====
 
-There are four kind of "paths":
+There are five kind of "paths":
 
 - app: looks like ``@MyBundle:public/images/asset.png``
 - app global: cannot be converted to URL, looks like ``@data/image.png`` and will resolve to ``app/Resources/data/image.png``
+- absolute: starts with single ``/``, should be publicly available, will resolve to ``web/``
 - vendor: a relative path, should be used only by compass plugins (eg. zurb-foundation, blueprint)
 - absolute path: starts with ``/``, ``http://`` etc. and will NOT be changed by connector
 

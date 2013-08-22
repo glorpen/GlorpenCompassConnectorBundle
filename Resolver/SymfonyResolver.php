@@ -39,6 +39,10 @@ class SymfonyResolver extends SimpleResolver {
 		parent::__construct(null, $outputDir);
 	}
 	
+	public function setPublicDir($dir){
+		$this->publicDir = $dir;
+	}
+	
 	public function listVPaths($vpath, $mode){
 		
 		list($pre, $post) = explode('*', $vpath, 2);
