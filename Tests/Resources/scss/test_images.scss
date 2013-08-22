@@ -12,4 +12,7 @@ images {
     generated-image: generated-image-url("@TestBundle:public/1x1.png", false);
     
     width-app-resource: image-width("@images/image.png");
+    
+    width-abs-image: image-width("/images/abs-image.png");
+    abs-image-url: image-url("/images/abs-image.png");
 }

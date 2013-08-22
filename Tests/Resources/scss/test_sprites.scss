@@ -6,3 +6,6 @@
 
 @import "@images/app-something/*.png";
 @include app-something-sprites(red);
+
+@import "/images/abs-sprites/*.png";
+@include abs-sprites-sprites(red);

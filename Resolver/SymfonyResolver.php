@@ -1,6 +1,8 @@
 <?php
 namespace Glorpen\Assetic\CompassConnectorBundle\Resolver;
 
+use Glorpen\Assetic\CompassConnectorFilter\CompassProcess;
+
 use Symfony\Component\DependencyInjection\Exception\ScopeWideningInjectionException;
 
 use Symfony\Component\DependencyInjection\Exception\LogicException;
@@ -19,6 +21,7 @@ class SymfonyResolver extends SimpleResolver {
 	
 	protected $kernel;
 	protected $container;
+	protected $publicDir;
 	
 	public function __construct(KernelInterface $kernel, $outputDir, $vendorPrefix, PackageInterface $asseticPackage = null) {
 		$this->kernel = $kernel;
@@ -31,19 +34,24 @@ class SymfonyResolver extends SimpleResolver {
 		}
 		$this->setAppPrefix($appPrefix);
 		$this->setVendorPrefix($appPrefix.$vendorPrefix);
+		$this->publicDir = $outputDir;
 		
 		parent::__construct(null, $outputDir);
 	}
 	
-	public function listVPaths($vpath, $isVendor){
+	public function listVPaths($vpath, $mode){
 		
 		list($pre, $post) = explode('*', $vpath, 2);
-		$info = $this->resolveVPath($pre, $isVendor, 'image');
+		$info = $this->resolveVPath($pre, $mode, 'image');
 		
 		$finder = Finder::create()->in($info->path)->files();
 		$ret = array();
 		foreach($finder as $f){
-			$ret[] = '@'.($info->bundle?($info->bundle.':'):'').$info->resource.'/'.$f->getBasename();
+			if($mode == CompassProcess::MODE_ABSOLUTE){
+				$ret[] = '/'.$info->resource.'/'.$f->getBasename();
+			} else {
+				$ret[] = '@'.($info->bundle?($info->bundle.':'):'').$info->resource.'/'.$f->getBasename();
+			}
 		}
 		
 		return $ret;
@@ -72,7 +80,9 @@ class SymfonyResolver extends SimpleResolver {
 	 * @param string $type
 	 * @return StdClass|null
 	 */
-	protected function resolveVPath($vpath, $isVendor, $type=null){
+	protected function resolveVPath($vpath, $mode, $type=null){
+		
+		$isVendor = $mode == CompassProcess::MODE_VENDOR;
 		
 		$postfix = '';
 		if(strpos($vpath, '?')!==false){
@@ -82,18 +92,30 @@ class SymfonyResolver extends SimpleResolver {
 		$appResources = $this->kernel->getRootDir().'/Resources';
 		$bundlesToSearch = array();
 		
-		if($isVendor){
-			$path = $vpath;
-			foreach($this->kernel->getBundles() as $b){
-				$bundlesToSearch[] = $b->getName();
-			}
-		} else {
-			if(strpos($vpath, ':') === false){ //global resource path
-				return $this->resolveAppPath($vpath);
-			} else { //bundle path
-				list($bundle, $path) = explode(':', $vpath,2);
-				$bundlesToSearch[] = $bundle;
-			}
+		switch($mode){
+			case CompassProcess::MODE_VENDOR:
+				$path = $vpath;
+				foreach($this->kernel->getBundles() as $b){
+					$bundlesToSearch[] = $b->getName();
+				}
+				break;
+			case CompassProcess::MODE_APP:
+				if(strpos($vpath, ':') === false){ //global resource path
+					return $this->resolveAppPath($vpath);
+				} else { //bundle path
+					list($bundle, $path) = explode(':', $vpath,2);
+					$bundlesToSearch[] = $bundle;
+				}
+				break;
+			case CompassProcess::MODE_ABSOLUTE:
+				$realpath = $this->publicDir.'/'.$vpath;
+				return (object) array(
+						'resource' => trim($vpath,'/'),
+						'path' => $realpath,
+						'bundle' => null,
+						'postfix' => $postfix
+				);
+				break;
 		}
 		
 		foreach($bundlesToSearch as $bundleName){
@@ -114,15 +136,18 @@ class SymfonyResolver extends SimpleResolver {
 		}
 	}
 	
-	public function getFilePath($vpath, $isVendor, $type){
-		if($r=$this->resolveVPath($vpath, $isVendor, $type)){
+	public function getFilePath($vpath, $mode, $type){
+		if($r=$this->resolveVPath($vpath, $mode, $type)){
 			return $r->path;
 		}
 	}
 	
-	public function getUrl($vpath, $isVendor, $type){
+	public function getUrl($vpath, $mode, $type){
+		
+		$isVendor = $mode == CompassProcess::MODE_VENDOR;
+		
 		$vpathFile = '';
-		$isGeneratedImage = $type == 'generated_image';
+		$isGeneratedImage = $type == CompassProcess::TYPE_GENERATED_IMAGE;
 		if($isGeneratedImage){
 			if($isVendor){
 				return parent::getUrl($vpath, $isVendor, $type);
@@ -132,17 +157,19 @@ class SymfonyResolver extends SimpleResolver {
 			}
 		}
 		
-		$info = $this->resolveVPath($vpath, $isVendor, $type);
+		$info = $this->resolveVPath($vpath, $mode, $type);
 		
 		if(!$info) throw new \RuntimeException(sprintf('Could not resolve "%s"', $vpath));
-		if(!$isGeneratedImage && (strpos($info->resource,'public')!==0 || $info->bundle === null)){
+		if(!$isGeneratedImage && (!$mode==CompassProcess::MODE_ABSOLUTE && (strpos($info->resource,'public')!==0 || $info->bundle === null))){
 			throw new \RuntimeException(sprintf('Resolved path for "%s" is not public', $vpath));
 		}
 		
-		$prefix = $isGeneratedImage?$this->generatedPrefix:$this->appPrefix;
+		$prefix = $this->appPrefix.($isGeneratedImage?$this->generatedPrefix:'');
 		
 		if($isGeneratedImage && $info->bundle === null){
-			$dirpath = 'global/'.$info->resource;
+			$dirpath = 'global/'.$info->resource; //sprites from app/Resource or web/
+		} elseif ($mode == CompassProcess::MODE_ABSOLUTE){
+			$dirpath = trim($vpath,'/');
 		} else {
 			$dirpath = $this->getBundleWebPrefix($info->bundle).substr($info->resource, 7);
 		}
@@ -161,7 +188,7 @@ class SymfonyResolver extends SimpleResolver {
 				return $this->outputDir.'/'.$this->generatedDir.'/global/'.$vpath;
 			} else {
 				list($bundle, $path) = explode(':', $vpath,2);
-				$info = $this->resolveVPath($bundle.':', false);
+				$info = $this->resolveVPath($bundle.':', CompassProcess::MODE_APP, null);
 				return $this->outputDir.'/'.$this->generatedDir.'/'.$this->getBundleWebPrefix($info->bundle).preg_replace('#.*?public/#','/', $path);
 			}
 		} else {

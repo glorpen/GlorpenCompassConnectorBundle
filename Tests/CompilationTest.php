@@ -66,9 +66,9 @@ class CompilationTest extends WebTestCase {
 		$css = $this->getAssetCollection('test_fonts.scss');
 		$out = $css->dump();
 		
-		$this->assertContains('/bundles/test/vendor/fonts/vendor_empty.ttf', $out);
-		$this->assertContains('/bundles/test/fonts/empty.ttf', $out);
-		$this->assertContains("'/this.eot'", $out);
+		$this->assertContains('http://test.host.com/some-prefix/bundles/test/vendor/fonts/vendor_empty.ttf', $out);
+		$this->assertContains('http://test.host.com/some-prefix/bundles/test/fonts/empty.ttf', $out);
+		$this->assertContains("'http://test.host.com/some-prefix/this.eot'", $out);
 	
 		$this->assertContains("app-inline-font: url('data:font/truetype;base64", $out);
 		$this->assertContains("vendor-inline-font: url('data:font/truetype;base64", $out);
@@ -83,19 +83,23 @@ class CompilationTest extends WebTestCase {
 		$this->assertContains('width-app: 10px;', $out);
 		$this->assertContains('width-vendor: 10px;', $out);
 		$this->assertContains("image-inline: url('data:image/png;base64,", $out);
-		$this->assertContains("vendor-generated-image-busted: url('/generated/vendor_1x1.png?", $out);
-		$this->assertContains("vendor-generated-image: url('/generated/vendor_1x1.png'", $out);
-		$this->assertContains("generated-image-busted: url('/generated/bundles/test/1x1.png?", $out);
-		$this->assertContains("generated-image: url('/generated/bundles/test/1x1.png'", $out);
+		$this->assertContains("vendor-generated-image-busted: url('http://test.host.com/some-prefix/generated/vendor_1x1.png?", $out);
+		$this->assertContains("vendor-generated-image: url('http://test.host.com/some-prefix/generated/vendor_1x1.png'", $out);
+		$this->assertContains("generated-image-busted: url('http://test.host.com/some-prefix/generated/bundles/test/1x1.png?", $out);
+		$this->assertContains("generated-image: url('http://test.host.com/some-prefix/generated/bundles/test/1x1.png'", $out);
 		$this->assertContains('width-app-resource: 10px;', $out);
+		
+		$this->assertContains("abs-image-url: url('http://test.host.com/some-prefix/images/abs-image.png?", $out);
+		$this->assertContains("width-abs-image: 10px;", $out);
 	}
-	
+
 	public function testSprites(){
 		$css = $this->getAssetCollection('test_sprites.scss');
 		$out = $css->dump();
 	
-		$this->assertContains('/generated/bundles/test/sprites/something-s3c0fcffb3c.png', $out);
-		$this->assertContains('/generated/vendor-something-sf004878b50.png', $out);
-		$this->assertContains('/generated/global/images/app-something-se5beb1abac.png', $out);
+		$this->assertContains('http://test.host.com/some-prefix/generated/bundles/test/sprites/something-s3c0fcffb3c.png', $out);
+		$this->assertContains('http://test.host.com/some-prefix/generated/vendor-something-sf004878b50.png', $out);
+		$this->assertContains('http://test.host.com/some-prefix/generated/global/images/app-something-se5beb1abac.png', $out);
+		$this->assertContains('http://test.host.com/some-prefix/generated/global/images/abs-sprites-s827bde42e1.png', $out);
 	}
 }
