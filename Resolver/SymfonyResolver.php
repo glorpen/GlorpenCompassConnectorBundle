@@ -108,9 +108,10 @@ class SymfonyResolver extends SimpleResolver {
 				}
 				break;
 			case CompassProcess::MODE_ABSOLUTE:
-				$realpath = $this->publicDir.'/'.$vpath;
+				$respath = trim($vpath,'/');
+				$realpath = $this->publicDir.'/'.$respath;
 				return (object) array(
-						'resource' => trim($vpath,'/'),
+						'resource' => $respath,
 						'path' => $realpath,
 						'bundle' => null,
 						'postfix' => $postfix
@@ -166,6 +167,7 @@ class SymfonyResolver extends SimpleResolver {
 		
 		$prefix = $this->appPrefix.($isGeneratedImage?$this->generatedPrefix:'');
 		
+		var_dump($info);
 		if($isGeneratedImage && $info->bundle === null){
 			$dirpath = 'global/'.$info->resource; //sprites from app/Resource or web/
 		} elseif ($mode == CompassProcess::MODE_ABSOLUTE){

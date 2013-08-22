@@ -11,3 +11,4 @@ syntax: regexp
 ^Tests/Resources/web/generated-images/vendor-something.*$
 ^Tests/Resources/web/generated-images/bundles/test/sprites$
 ^Tests/Resources/web/generated-images/global/images$
+^Tests/Resources/web/generated-images/images$
