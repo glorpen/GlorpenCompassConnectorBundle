@@ -25,7 +25,7 @@ class SymfonyResolver extends SimpleResolver {
 		$this->vendorPrefixPath = $vendorPrefix;
 		
 		if($asseticPackage){
-			$appPrefix = current(explode('?',$asseticPackage->getUrl('')));
+			$appPrefix = rtrim(current(explode('?',$asseticPackage->getUrl(''))), '/');
 		} else {
 			$appPrefix = '';
 		}
