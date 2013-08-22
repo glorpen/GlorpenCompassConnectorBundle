@@ -82,7 +82,7 @@ In rare, special cases however that might not be necessary, then you can set the
 
 You need to add following configuration to you project (remember to change urls):
 
-.. sorucecode:: yaml
+.. sourcecode:: yaml
 
    framework:
       templating:
