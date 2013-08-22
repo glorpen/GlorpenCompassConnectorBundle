@@ -72,6 +72,25 @@ How to install
               resource: "%kernel.root_dir%/../vendor/glorpen/compass-connector-bundle/Glorpen/Assetic/CompassConnectorBundle/Resources/config/filter.xml"
               #apply_to: ".scss$" # uncomment to auto-apply to all scss assets
 
+
+If you are running into following error:
+
+*Scope Widening Injection detected: The definition "assetic.filter.compass_connector.resolver" references the service "templating.asset.default_package"
+which belongs to a narrower scope. Generally, it is safer to either move "assetic.filter.compass_connector.resolver" to scope "request" or alternatively
+rely on the provider pattern by injecting the container itself, and requesting the service "templating.asset.default_package" each time it is needed.
+In rare, special cases however that might not be necessary, then you can set the reference to strict=false to get rid of this error.*
+
+You need to add following configuration to you project (remember to change urls):
+
+.. sorucecode:: yaml
+
+   framework:
+      templating:
+         assets_base_urls:
+            http: ["http://localhost:8000"]
+            ssl: ["http://localhost:8000"]
+
+
 Usage
 =====
 
@@ -95,3 +114,19 @@ Some examples:
 
 
 This bundle uses Assetic and CompassConnector filter name is ``compass_connector``.
+
+Confguration
+============
+
+You can change default configuration by setting following DIC parameters:
+
+.. sourcecode:: yaml
+
+   parameters:
+      assetic.filter.compass_connector.plugins: []
+      assetic.filter.compass_connector.cache_path: %kernel.root_dir%/cache/compassConnector
+      assetic.filter.compass_connector.compass_bin: /usr/bin/compass
+      assetic.filter.compass_connector.resolver.output_dir: %kernel.root_dir%/../web/compass
+      assetic.filter.compass_connector.resolver.vendor_prefix: vendors
+   
+As for `assetic.filter.compass_connector.plugins` you can provide arguments as a list eg. `["zurb-foundation"]` or array with required gem version: `{"zurb-foundation":">=4"}`
