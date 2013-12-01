@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="assetic.filter.compass_connector.class">Glorpen\Assetic\CompassConnectorFilter\Filter</parameter>
         <parameter key="assetic.filter.compass_connector.plugins" type="collection" />
+        <parameter key="assetic.filter.compass_connector.imports" type="collection" />
         <parameter key="assetic.filter.compass_connector.cache_path">%kernel.root_dir%/cache/compassConnector</parameter>
         <parameter key="assetic.filter.compass_connector.compass_bin">/usr/bin/compass</parameter>
         
@@ -30,6 +31,7 @@
             <argument>%assetic.filter.compass_connector.cache_path%</argument>
             <argument>%assetic.filter.compass_connector.compass_bin%</argument>
             <call method="setPlugins"><argument>%assetic.filter.compass_connector.plugins%</argument></call>
+            <call method="setImports"><argument>%assetic.filter.compass_connector.imports%</argument></call>
             <!--<call method="setEnvironment"><argument>%assetic.filter.compass_connector.environment%</argument></call>-->
         </service>
     </services>

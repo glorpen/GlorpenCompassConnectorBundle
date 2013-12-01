@@ -126,7 +126,9 @@ You can change default configuration by setting following DIC parameters:
 .. sourcecode:: yaml
 
    parameters:
-      assetic.filter.compass_connector.plugins: []
+      assetic.filter.compass_connector.plugins:
+         "zurb-foundation": ">4"
+      assetic.filter.compass_connector.imports: ["/some/path"]
       assetic.filter.compass_connector.cache_path: %kernel.root_dir%/cache/compassConnector
       assetic.filter.compass_connector.compass_bin: /usr/bin/compass
       assetic.filter.compass_connector.resolver.output_dir: %kernel.root_dir%/../web/compass
