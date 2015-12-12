@@ -1,3 +1,8 @@
+..
+
+  **This project is now DEPRECATED. Currently there are better alternatives, please use those in new projects.**
+
+
 -----------------------------
 GlorpenCompassConnectorBundle
 -----------------------------
